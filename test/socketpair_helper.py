@@ -1,4 +1,4 @@
-import socket
+from gevent import socket
 
 # Figuring out what errors could come out of a socket. There are three
 # different situations. Python 3 post-PEP3151 will define and use

@@ -1,4 +1,4 @@
-import socket
+from gevent import socket
 import zlib
 
 from io import BytesIO, BufferedReader
@@ -6,13 +6,13 @@ from io import BytesIO, BufferedReader
 import pytest
 import mock
 
-from urllib3.response import HTTPResponse
-from urllib3.exceptions import (
+from urllib3_gevent.response import HTTPResponse
+from urllib3_gevent.exceptions import (
     DecodeError, ResponseNotChunked, ProtocolError, InvalidHeader
 )
-from urllib3.packages.six.moves import http_client as httplib
-from urllib3.util.retry import Retry, RequestHistory
-from urllib3.util.response import is_fp_closed
+from urllib3_gevent.packages.six.moves import http_client as httplib
+from urllib3_gevent.util.retry import Retry, RequestHistory
+from urllib3_gevent.util.response import is_fp_closed
 
 from base64 import b64decode
 
@@ -526,7 +526,7 @@ class TestResponse(object):
         assert resp.length_remaining == 3
 
     def test_mock_httpresponse_stream(self):
-        # Mock out a HTTP Request that does enough to make it through urllib3's
+        # Mock out a HTTP Request that does enough to make it through urllib3_gevent's
         # read() and close() calls, and also exhausts and underlying file
         # object.
         class MockHTTPRequest(object):

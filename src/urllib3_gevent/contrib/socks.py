@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 This module contains provisional support for SOCKS proxies from within
-urllib3. This module supports SOCKS4 (specifically the SOCKS4A variant) and
+urllib3_gevent. This module supports SOCKS4 (specifically the SOCKS4A variant) and
 SOCKS5. To enable its functionality, either install PySocks or install this
 module with the ``socks`` extra.
 
-The SOCKS implementation supports the full range of urllib3 features. It also
+The SOCKS implementation supports the full range of urllib3_gevent features. It also
 supports the following SOCKS features:
 
 - SOCKS4
@@ -24,15 +24,15 @@ Known Limitations:
 from __future__ import absolute_import
 
 try:
-    import socks
+    from ..packages import socks
 except ImportError:
     import warnings
     from ..exceptions import DependencyWarning
 
     warnings.warn((
-        'SOCKS support in urllib3 requires the installation of optional '
+        'SOCKS support in urllib3_gevent requires the installation of optional '
         'dependencies: specifically, PySocks.  For more information, see '
-        'https://urllib3.readthedocs.io/en/latest/contrib.html#socks-proxies'
+        'https://urllib3_gevent.readthedocs.io/en/latest/contrib.html#socks-proxies'
         ),
         DependencyWarning
     )
@@ -51,7 +51,7 @@ from ..poolmanager import PoolManager
 from ..util.url import parse_url
 
 try:
-    import ssl
+    from gevent import ssl
 except ImportError:
     ssl = None
 
@@ -123,7 +123,7 @@ class SOCKSConnection(HTTPConnection):
 
 
 # We don't need to duplicate the Verified/Unverified distinction from
-# urllib3/connection.py here because the HTTPSConnection will already have been
+# urllib3_gevent/connection.py here because the HTTPSConnection will already have been
 # correctly set to either the Verified or Unverified form by that module. This
 # means the SOCKSHTTPSConnection will automatically be the correct type.
 class SOCKSHTTPSConnection(SOCKSConnection, HTTPSConnection):
@@ -140,7 +140,7 @@ class SOCKSHTTPSConnectionPool(HTTPSConnectionPool):
 
 class SOCKSProxyManager(PoolManager):
     """
-    A version of the urllib3 ProxyManager that routes connections via the
+    A version of the urllib3_gevent ProxyManager that routes connections via the
     defined SOCKS proxy.
     """
     pool_classes_by_scheme = {

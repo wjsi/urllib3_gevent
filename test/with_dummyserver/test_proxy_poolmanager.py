@@ -1,19 +1,19 @@
 import json
-import socket
 import unittest
 
 import pytest
+from gevent import socket
 
 from dummyserver.testcase import HTTPDummyProxyTestCase, IPv6HTTPDummyProxyTestCase
 from dummyserver.server import (
     DEFAULT_CA, DEFAULT_CA_BAD, get_unreachable_address)
 from .. import TARPIT_HOST, requires_network
 
-from urllib3._collections import HTTPHeaderDict
-from urllib3.poolmanager import proxy_from_url, ProxyManager
-from urllib3.exceptions import (
+from urllib3_gevent._collections import HTTPHeaderDict
+from urllib3_gevent.poolmanager import proxy_from_url, ProxyManager
+from urllib3_gevent.exceptions import (
     MaxRetryError, SSLError, ProxyError, ConnectTimeoutError)
-from urllib3.connectionpool import connection_from_url, VerifiedHTTPSConnection
+from urllib3_gevent.connectionpool import connection_from_url, VerifiedHTTPSConnection
 
 
 class TestHTTPProxyManager(HTTPDummyProxyTestCase):

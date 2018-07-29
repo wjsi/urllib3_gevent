@@ -18,25 +18,25 @@ You can install them with the following command:
     pip install pyopenssl cryptography idna
 
 To activate certificate checking, call
-:func:`~urllib3.contrib.pyopenssl.inject_into_urllib3` from your Python code
+:func:`~urllib3_gevent.contrib.pyopenssl.inject_into_urllib3` from your Python code
 before you begin making HTTP requests. This can be done in a ``sitecustomize``
-module, or at any other time before your application begins using ``urllib3``,
+module, or at any other time before your application begins using ``urllib3_gevent``,
 like this::
 
     try:
-        import urllib3.contrib.pyopenssl
-        urllib3.contrib.pyopenssl.inject_into_urllib3()
+        import urllib3_gevent.contrib.pyopenssl
+        urllib3_gevent.contrib.pyopenssl.inject_into_urllib3()
     except ImportError:
         pass
 
-Now you can use :mod:`urllib3` as you normally would, and it will support SNI
+Now you can use :mod:`urllib3_gevent` as you normally would, and it will support SNI
 when the required modules are installed.
 
 Activating this module also has the positive side effect of disabling SSL/TLS
 compression in Python 2 (see `CRIME attack`_).
 
 If you want to configure the default list of supported cipher suites, you can
-set the ``urllib3.contrib.pyopenssl.DEFAULT_SSL_CIPHER_LIST`` variable.
+set the ``urllib3_gevent.contrib.pyopenssl.DEFAULT_SSL_CIPHER_LIST`` variable.
 
 .. _sni: https://en.wikipedia.org/wiki/Server_Name_Indication
 .. _crime attack: https://en.wikipedia.org/wiki/CRIME_(security_exploit)
@@ -64,9 +64,10 @@ except ImportError:  # Platform-specific: Python 3
     from ..packages.backports.makefile import backport_makefile
 
 import logging
-import ssl
 from ..packages import six
 import sys
+
+from gevent import ssl
 
 from .. import util
 
@@ -75,7 +76,7 @@ __all__ = ['inject_into_urllib3', 'extract_from_urllib3']
 # SNI always works.
 HAS_SNI = True
 
-# Map from urllib3 to PyOpenSSL compatible parameter-values.
+# Map from urllib3_gevent to PyOpenSSL compatible parameter-values.
 _openssl_versions = {
     ssl.PROTOCOL_SSLv23: OpenSSL.SSL.SSLv23_METHOD,
     ssl.PROTOCOL_TLSv1: OpenSSL.SSL.TLSv1_METHOD,
@@ -113,7 +114,7 @@ log = logging.getLogger(__name__)
 
 
 def inject_into_urllib3():
-    'Monkey-patch urllib3 with PyOpenSSL-backed SSL-support.'
+    'Monkey-patch urllib3_gevent with PyOpenSSL-backed SSL-support.'
 
     _validate_dependencies_met()
 
@@ -219,7 +220,7 @@ def get_subj_alt_name(peer_cert):
         # no SAN field is present.
         log.warning(
             "A problem was encountered with the certificate that prevented "
-            "urllib3 from finding the SubjectAlternativeName field. This can "
+            "urllib3_gevent from finding the SubjectAlternativeName field. This can "
             "affect certificate validation. The error was %s",
             e,
         )

@@ -12,8 +12,9 @@ import ctypes
 import itertools
 import re
 import os
-import ssl
 import tempfile
+
+from gevent import ssl
 
 from .bindings import Security, CoreFoundation, CFConst
 

@@ -1,7 +1,7 @@
 """
 NTLM authenticating pool, contributed by erikcederstran
 
-Issue #10, see: http://code.google.com/p/urllib3/issues/detail?id=10
+Issue #10, see: http://code.google.com/p/urllib3_gevent/issues/detail?id=10
 """
 from __future__ import absolute_import
 
@@ -17,7 +17,7 @@ log = getLogger(__name__)
 
 class NTLMConnectionPool(HTTPSConnectionPool):
     """
-    Implements an NTLM authentication version of an urllib3 connection pool
+    Implements an NTLM authentication version of an urllib3_gevent connection pool
     """
 
     scheme = 'https'

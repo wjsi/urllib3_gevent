@@ -4,9 +4,9 @@ import mock
 
 import pytest
 
-from urllib3 import HTTPConnectionPool
-from urllib3.exceptions import EmptyPoolError
-from urllib3.packages.six.moves import queue
+from urllib3_gevent import HTTPConnectionPool
+from urllib3_gevent.exceptions import EmptyPoolError
+from urllib3_gevent.packages.six.moves import queue
 
 
 class BadError(Exception):
@@ -19,7 +19,7 @@ class BadError(Exception):
 class TestMonkeypatchResistance(object):
     """
     Test that connection pool works even with a monkey patched Queue module,
-    see obspy/obspy#1599, kennethreitz/requests#3742, shazow/urllib3#1061.
+    see obspy/obspy#1599, kennethreitz/requests#3742, shazow/urllib3_gevent#1061.
     """
     def test_queue_monkeypatching(self):
         with mock.patch.object(queue, 'Empty', BadError):

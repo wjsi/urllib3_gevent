@@ -1,5 +1,5 @@
 """These tests ensure that when running in App Engine standard with the
-App Engine sandbox enabled that urllib3 appropriately uses the App
+App Engine sandbox enabled that urllib3_gevent appropriately uses the App
 Engine-patched version of httplib to make requests."""
 
 import httplib
@@ -39,8 +39,8 @@ class TestHTTP(TestWithoutSSL):
             'google.appengine.api.urlfetch.fetch', return_value=resp
         )
         with fetch_patch as fetch_mock:
-            import urllib3
-            pool = urllib3.HTTPConnectionPool('www.google.com', '80')
+            import urllib3_gevent
+            pool = urllib3_gevent.HTTPConnectionPool('www.google.com', '80')
             r = pool.request('GET', '/')
             self.assertEqual(r.status, 200, r.data)
             self.assertEqual(fetch_mock.call_count, 1)
@@ -65,9 +65,9 @@ class TestHTTPS(unittest.TestCase):
             'google.appengine.api.urlfetch.fetch', return_value=resp
         )
         with fetch_patch as fetch_mock:
-            import urllib3
-            pool = urllib3.HTTPSConnectionPool('www.google.com', '443')
-            pool.ConnectionCls = urllib3.connection.UnverifiedHTTPSConnection
+            import urllib3_gevent
+            pool = urllib3_gevent.HTTPSConnectionPool('www.google.com', '443')
+            pool.ConnectionCls = urllib3_gevent.connection.UnverifiedHTTPSConnection
             r = pool.request('GET', '/')
             self.assertEqual(r.status, 200, r.data)
             self.assertEqual(fetch_mock.call_count, 1)

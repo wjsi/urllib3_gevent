@@ -1,13 +1,13 @@
 import datetime
 import json
 import logging
-import ssl
 import sys
 import unittest
 import warnings
 
 import mock
 import pytest
+from gevent import ssl
 
 from dummyserver.testcase import (
     HTTPSDummyServerTestCase, IPV6HTTPSDummyServerTestCase
@@ -27,13 +27,13 @@ from test import (
     requires_network,
     TARPIT_HOST,
 )
-from urllib3 import HTTPSConnectionPool
-from urllib3.connection import (
+from urllib3_gevent import HTTPSConnectionPool
+from urllib3_gevent.connection import (
     VerifiedHTTPSConnection,
     UnverifiedHTTPSConnection,
     RECENT_DATE,
 )
-from urllib3.exceptions import (
+from urllib3_gevent.exceptions import (
     SSLError,
     ConnectTimeoutError,
     InsecureRequestWarning,
@@ -41,9 +41,9 @@ from urllib3.exceptions import (
     InsecurePlatformWarning,
     MaxRetryError,
 )
-from urllib3.packages import six
-from urllib3.util.timeout import Timeout
-import urllib3.util as util
+from urllib3_gevent.packages import six
+from urllib3_gevent.util.timeout import Timeout
+import urllib3_gevent.util as util
 
 
 ResourceWarning = getattr(
@@ -51,7 +51,7 @@ ResourceWarning = getattr(
         'ResourceWarning', type('ResourceWarning', (), {}))
 
 
-log = logging.getLogger('urllib3.connectionpool')
+log = logging.getLogger('urllib3_gevent.connectionpool')
 log.setLevel(logging.NOTSET)
 log.addHandler(logging.StreamHandler(sys.stdout))
 
@@ -543,7 +543,7 @@ class TestHTTPS(HTTPSDummyServerTestCase):
     def test_ssl_wrong_system_time(self):
         self._pool.cert_reqs = 'CERT_REQUIRED'
         self._pool.ca_certs = DEFAULT_CA
-        with mock.patch('urllib3.connection.datetime') as mock_date:
+        with mock.patch('urllib3_gevent.connection.datetime') as mock_date:
             mock_date.date.today.return_value = datetime.date(1970, 1, 1)
 
             w = self._request_without_resource_warnings('GET', '/')
@@ -608,7 +608,7 @@ class TestHTTPS_IPSAN(HTTPSDummyServerTestCase):
     certs = IP_SAN_CERTS
 
     def test_can_validate_ip_san(self):
-        """Ensure that urllib3 can validate SANs with IP addresses in them."""
+        """Ensure that urllib3_gevent can validate SANs with IP addresses in them."""
         try:
             import ipaddress  # noqa: F401
         except ImportError:

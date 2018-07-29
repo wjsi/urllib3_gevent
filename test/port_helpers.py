@@ -1,7 +1,7 @@
 # These helpers are copied from test_support.py in the Python 2.7 standard
 # library test suite.
 
-import socket
+from gevent import socket
 
 
 # Don't use "localhost", since resolving it uses the DNS under recent

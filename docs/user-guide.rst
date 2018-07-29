@@ -1,20 +1,20 @@
 User Guide
 ==========
 
-.. currentmodule:: urllib3
+.. currentmodule:: urllib3_gevent
 
 Making requests
 ---------------
 
 First things first, import the urllib3 module::
 
-    >>> import urllib3
+    >>> import urllib3_gevent
 
 You'll need a :class:`~poolmanager.PoolManager` instance to make requests.
 This object handles all of the details of connection pooling and thread safety
 so that you don't have to::
 
-    >>> http = urllib3.PoolManager()
+    >>> http = urllib3_gevent.PoolManager()
 
 To make a request use :meth:`~poolmanager.PoolManager.request`::
 
@@ -221,8 +221,8 @@ Once you have certificates, you can create a :class:`~poolmanager.PoolManager`
 that verifies certificates when making requests::
 
     >>> import certifi
-    >>> import urllib3
-    >>> http = urllib3.PoolManager(
+    >>> import urllib3_gevent
+    >>> http = urllib3_gevent.PoolManager(
     ...     cert_reqs='CERT_REQUIRED',
     ...     ca_certs=certifi.where())
 
@@ -232,7 +232,7 @@ verification and will raise :class:`~exceptions.SSLError` if verification fails:
     >>> http.request('GET', 'https://google.com')
     (No exception)
     >>> http.request('GET', 'https://expired.badssl.com')
-    urllib3.exceptions.SSLError ...
+    urllib3_gevent.exceptions.SSLError ...
 
 .. note:: You can use OS-provided certificates if desired. Just specify the full
     path to the certificate bundle as the ``ca_certs`` argument instead of
@@ -249,10 +249,10 @@ Older versions of Python 2 are built with an :mod:`ssl` module that lacks
 :ref:`SNI support <sni_warning>` and can lag behind security updates. For these reasons it's recommended to use
 `pyOpenSSL <https://pyopenssl.readthedocs.io/en/latest/>`_.
 
-If you install urllib3 with the ``secure`` extra, all required packages for
+If you install urllib3_gevent with the ``secure`` extra, all required packages for
 certificate verification on Python 2 will be installed::
 
-    pip install urllib3[secure]
+    pip install urllib3_gevent[secure]
 
 If you want to install the packages manually, you will need ``pyOpenSSL``,
 ``cryptography``, ``idna``, and ``certifi``.
@@ -263,22 +263,22 @@ If you want to install the packages manually, you will need ``pyOpenSSL``,
     <https://cryptography.io/en/latest/installation/#building-cryptography-on-linux>`_
     for the list of packages required.
 
-Once installed, you can tell urllib3 to use pyOpenSSL by using :mod:`urllib3.contrib.pyopenssl`::
+Once installed, you can tell urllib3_gevent to use pyOpenSSL by using :mod:`urllib3_gevent.contrib.pyopenssl`::
 
-    >>> import urllib3.contrib.pyopenssl
-    >>> urllib3.contrib.pyopenssl.inject_into_urllib3()
+    >>> import urllib3_gevent.contrib.pyopenssl
+    >>> urllib3_gevent.contrib.pyopenssl.inject_into_urllib3()
 
 Finally, you can create a :class:`~poolmanager.PoolManager` that verifies
 certificates when performing requests::
 
     >>> import certifi
-    >>> import urllib3
-    >>> http = urllib3.PoolManager(
+    >>> import urllib3_gevent
+    >>> http = urllib3_gevent.PoolManager(
     ...     cert_reqs='CERT_REQUIRED',
     ...     ca_certs=certifi.where())
 
 If you do not wish to use pyOpenSSL, you can simply omit the call to
-:func:`urllib3.contrib.pyopenssl.inject_into_urllib3`. urllib3 will fall back
+:func:`urllib3_gevent.contrib.pyopenssl.inject_into_urllib3`. urllib3 will fall back
 to the standard-library :mod:`ssl` module. You may experience
 :ref:`several warnings <ssl_warnings>` when doing this.
 
@@ -304,7 +304,7 @@ to :meth:`~poolmanager.PoolManager.request`::
 
     >>> http.request(
     ...     'GET', 'http://httpbin.org/delay/3', timeout=4.0)
-    <urllib3.response.HTTPResponse>
+    <urllib3_gevent.response.HTTPResponse>
     >>> http.request(
     ...     'GET', 'http://httpbin.org/delay/3', timeout=2.5)
     MaxRetryError caused by ReadTimeoutError
@@ -315,21 +315,21 @@ instance which lets you specify separate connect and read timeouts::
     >>> http.request(
     ...     'GET',
     ...     'http://httpbin.org/delay/3',
-    ...     timeout=urllib3.Timeout(connect=1.0))
-    <urllib3.response.HTTPResponse>
+    ...     timeout=urllib3_gevent.Timeout(connect=1.0))
+    <urllib3_gevent.response.HTTPResponse>
     >>> http.request(
     ...     'GET',
     ...     'http://httpbin.org/delay/3',
-    ...     timeout=urllib3.Timeout(connect=1.0, read=2.0))
+    ...     timeout=urllib3_gevent.Timeout(connect=1.0, read=2.0))
     MaxRetryError caused by ReadTimeoutError
 
 
 If you want all requests to be subject to the same timeout, you can specify
-the timeout at the :class:`~urllib3.poolmanager.PoolManager` level::
+the timeout at the :class:`~urllib3_gevent.poolmanager.PoolManager` level::
 
-    >>> http = urllib3.PoolManager(timeout=3.0)
-    >>> http = urllib3.PoolManager(
-    ...     timeout=urllib3.Timeout(connect=1.0, read=2.0))
+    >>> http = urllib3_gevent.PoolManager(timeout=3.0)
+    >>> http = urllib3_gevent.PoolManager(
+    ...     timeout=urllib3_gevent.Timeout(connect=1.0, read=2.0))
 
 You still override this pool-level timeout by specifying ``timeout`` to
 :meth:`~poolmanager.PoolManager.request`.
@@ -337,7 +337,7 @@ You still override this pool-level timeout by specifying ``timeout`` to
 Retrying requests
 -----------------
 
-urllib3 can automatically retry idempotent requests. This same mechanism also
+urllib3_gevent can automatically retry idempotent requests. This same mechanism also
 handles redirects. You can control the retries using the ``retries`` parameter
 to :meth:`~poolmanager.PoolManager.request`. By default, urllib3 will retry
 requests 3 times and follow up to 3 redirects.
@@ -371,7 +371,7 @@ For example, to do a total of 3 retries, but limit to only 2 redirects::
     >>> http.request(
     ...     'GET',
     ...     'http://httpbin.org/redirect/3',
-    ...     retries=urllib3.Retry(3, redirect=2))
+    ...     retries=urllib3_gevent.Retry(3, redirect=2))
     MaxRetryError
 
 You can also disable exceptions for too many redirects and just return the
@@ -380,17 +380,17 @@ You can also disable exceptions for too many redirects and just return the
     >>> r = http.request(
     ...     'GET',
     ...     'http://httpbin.org/redirect/3',
-    ...     retries=urllib3.Retry(
+    ...     retries=urllib3_gevent.Retry(
     ...         redirect=2, raise_on_redirect=False))
     >>> r.status
     302
 
 If you want all requests to be subject to the same retry policy, you can
-specify the retry at the :class:`~urllib3.poolmanager.PoolManager` level::
+specify the retry at the :class:`~urllib3_gevent.poolmanager.PoolManager` level::
 
-    >>> http = urllib3.PoolManager(retries=False)
-    >>> http = urllib3.PoolManager(
-    ...     retries=urllib3.Retry(5, redirect=2))
+    >>> http = urllib3)_gevent.PoolManager(retries=False)
+    >>> http = urllib3_gevent.PoolManager(
+    ...     retries=urllib3_gevent.Retry(5, redirect=2))
 
 You still override this pool-level retry policy by specifying ``retries`` to
 :meth:`~poolmanager.PoolManager.request`.
@@ -398,14 +398,14 @@ You still override this pool-level retry policy by specifying ``retries`` to
 Errors & Exceptions
 -------------------
 
-urllib3 wraps lower-level exceptions, for example::
+urllib3_gevent wraps lower-level exceptions, for example::
 
     >>> try:
     ...     http.request('GET', 'nx.example.com', retries=False)
-    >>> except urllib3.exceptions.NewConnectionError:
+    >>> except urllib3_gevent.exceptions.NewConnectionError:
     ...     print('Connection failed.')
 
-See :mod:`~urllib3.exceptions` for the full list of all exceptions.
+See :mod:`~urllib3_gevent.exceptions` for the full list of all exceptions.
 
 Logging
 -------
@@ -414,4 +414,4 @@ If you are using the standard library :mod:`logging` module urllib3 will
 emit several logs. In some cases this can be undesirable. You can use the
 standard logger interface to change the log level for urllib3's logger::
 
-    >>> logging.getLogger("urllib3").setLevel(logging.WARNING)
+    >>> logging.getLogger("urllib3_gevent").setLevel(logging.WARNING)

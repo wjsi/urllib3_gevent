@@ -1,18 +1,18 @@
-import socket
+from gevent import socket
 
 import pytest
 
-from urllib3.poolmanager import (
+from urllib3_gevent.poolmanager import (
     PoolKey,
     key_fn_by_scheme,
     PoolManager,
 )
-from urllib3 import connection_from_url
-from urllib3.exceptions import (
+from urllib3_gevent import connection_from_url
+from urllib3_gevent.exceptions import (
     ClosedPoolError,
     LocationValueError,
 )
-from urllib3.util import retry, timeout
+from urllib3_gevent.util import retry, timeout
 
 
 class TestPoolManager(object):

@@ -6,7 +6,7 @@ import mock
 import pytest
 
 try:
-    from urllib3.contrib.pyopenssl import (
+    from urllib3_gevent.contrib.pyopenssl import (
         _dnsname_to_stdlib, get_subj_alt_name
     )
     from cryptography import x509
@@ -17,7 +17,7 @@ except ImportError:
 
 def setup_module():
     try:
-        from urllib3.contrib.pyopenssl import inject_into_urllib3
+        from urllib3_gevent.contrib.pyopenssl import inject_into_urllib3
         inject_into_urllib3()
     except ImportError as e:
         pytest.skip('Could not import PyOpenSSL: %r' % e)
@@ -25,7 +25,7 @@ def setup_module():
 
 def teardown_module():
     try:
-        from urllib3.contrib.securetransport import extract_from_urllib3
+        from urllib3_gevent.contrib.securetransport import extract_from_urllib3
         extract_from_urllib3()
     except ImportError:
         pass
@@ -69,7 +69,7 @@ class TestPyOpenSSLHelpers(unittest.TestCase):
 
         self.assertEqual(_dnsname_to_stdlib(name), expected_result)
 
-    @mock.patch('urllib3.contrib.pyopenssl.log.warning')
+    @mock.patch('urllib3_gevent.contrib.pyopenssl.log.warning')
     def test_get_subj_alt_name(self, mock_warning):
         """
         If a certificate has two subject alternative names, cryptography raises

@@ -26,13 +26,13 @@
 # THE SOFTWARE.
 
 import sys
-import socket
 
 import tornado.httpserver
 import tornado.ioloop
 import tornado.iostream
 import tornado.web
 import tornado.httpclient
+from gevent import socket
 
 __all__ = ['ProxyHandler', 'run_proxy']
 

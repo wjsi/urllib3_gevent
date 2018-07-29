@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-import socket
+from gevent import socket
 from .wait import NoWayToWaitForSocketError, wait_for_read
 
 

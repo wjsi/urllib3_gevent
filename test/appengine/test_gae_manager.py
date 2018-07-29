@@ -1,10 +1,10 @@
 import dummyserver.testcase
 import pytest
 
-from urllib3.contrib import appengine
-import urllib3.exceptions
-import urllib3.util.url
-import urllib3.util.retry
+from urllib3_gevent.contrib import appengine
+import urllib3_gevent.exceptions
+import urllib3_gevent.util.url
+import urllib3_gevent.util.retry
 
 from test.with_dummyserver import test_connectionpool
 
@@ -27,7 +27,7 @@ class MockPool(object):
         return self.manager.urlopen(method, url, *args, **kwargs)
 
     def _absolute_url(self, path):
-        return urllib3.util.url.Url(
+        return urllib3_gevent.util.url.Url(
             scheme=self.scheme,
             host=self.host,
             port=self.port,
@@ -49,7 +49,7 @@ class TestGAEConnectionManager(test_connectionpool.TestConnectionPool):
     def test_exceptions(self):
         # DeadlineExceededError -> TimeoutError
         self.assertRaises(
-            urllib3.exceptions.TimeoutError,
+            urllib3_gevent.exceptions.TimeoutError,
             self.pool.request,
             'GET',
             '/sleep?seconds=0.005',
@@ -57,14 +57,14 @@ class TestGAEConnectionManager(test_connectionpool.TestConnectionPool):
 
         # InvalidURLError -> ProtocolError
         self.assertRaises(
-            urllib3.exceptions.ProtocolError,
+            urllib3_gevent.exceptions.ProtocolError,
             self.manager.request,
             'GET',
             'ftp://invalid/url')
 
         # DownloadError -> ProtocolError
         self.assertRaises(
-            urllib3.exceptions.ProtocolError,
+            urllib3_gevent.exceptions.ProtocolError,
             self.manager.request,
             'GET',
             'http://0.0.0.0')
@@ -134,7 +134,7 @@ class TestGAEConnectionManagerWithSSL(
         # SSLError is raised with dummyserver because URLFetch doesn't allow
         # self-signed certs.
         self.assertRaises(
-            urllib3.exceptions.SSLError,
+            urllib3_gevent.exceptions.SSLError,
             self.pool.request,
             'GET',
             '/')
@@ -148,8 +148,8 @@ class TestGAERetry(test_connectionpool.TestRetry):
         self.pool = MockPool(self.host, self.port, self.manager)
 
     def test_default_method_whitelist_retried(self):
-        """ urllib3 should retry methods in the default method whitelist """
-        retry = urllib3.util.retry.Retry(total=1, status_forcelist=[418])
+        """ urllib3_gevent should retry methods in the default method whitelist """
+        retry = urllib3_gevent.util.retry.Retry(total=1, status_forcelist=[418])
         # Use HEAD instead of OPTIONS, as URLFetch doesn't support OPTIONS
         resp = self.pool.request(
             'HEAD', '/successful_retry',
@@ -159,7 +159,7 @@ class TestGAERetry(test_connectionpool.TestRetry):
 
     def test_retry_return_in_response(self):
         headers = {'test-name': 'test_retry_return_in_response'}
-        retry = urllib3.util.retry.Retry(total=2, status_forcelist=[418])
+        retry = urllib3_gevent.util.retry.Retry(total=2, status_forcelist=[418])
         resp = self.pool.request('GET', '/successful_retry',
                                  headers=headers, retries=retry)
         self.assertEqual(resp.status, 200)
@@ -167,7 +167,7 @@ class TestGAERetry(test_connectionpool.TestRetry):
         # URLFetch use absolute urls.
         self.assertEqual(
             resp.retries.history,
-            (urllib3.util.retry.RequestHistory(
+            (urllib3_gevent.util.retry.RequestHistory(
                 'GET',
                 self.pool._absolute_url('/successful_retry'),
                 None, 418, None),))

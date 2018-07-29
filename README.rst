@@ -45,8 +45,8 @@ standard libraries:
 
 urllib3 is powerful and easy to use::
 
-    >>> import urllib3
-    >>> http = urllib3.PoolManager()
+    >>> import urllib3_gevent
+    >>> http = urllib3_gevent.PoolManager()
     >>> r = http.request('GET', 'http://httpbin.org/robots.txt')
     >>> r.status
     200
@@ -59,7 +59,7 @@ Installing
 
 urllib3 can be installed with `pip <https://pip.pypa.io>`_::
 
-    $ pip install urllib3
+    $ pip install urllib3_gevent
 
 Alternatively, you can grab the latest source code from `GitHub <https://github.com/urllib3/urllib3>`_::
 

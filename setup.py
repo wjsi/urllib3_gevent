@@ -10,7 +10,7 @@ import codecs
 base_path = os.path.dirname(__file__)
 
 # Get the version (borrowed from SQLAlchemy)
-with open(os.path.join(base_path, 'src', 'urllib3', '__init__.py')) as fp:
+with open(os.path.join(base_path, 'src', 'urllib3_gevent', '__init__.py')) as fp:
     VERSION = re.compile(r".*__version__ = '(.*?)'",
                          re.S).match(fp.read()).group(1)
 
@@ -26,7 +26,7 @@ if sys.version_info < (2, 7):
 else:
     PYOPENSSL_VERSION = 'pyOpenSSL >= 0.14'
 
-setup(name='urllib3',
+setup(name='urllib3_gevent',
       version=version,
       description="HTTP library with thread-safe connection pooling, file post, and more.",
       long_description=u'\n\n'.join([readme, changes]),
@@ -51,15 +51,15 @@ setup(name='urllib3',
       keywords='urllib httplib threadsafe filepost http https ssl pooling',
       author='Andrey Petrov',
       author_email='andrey.petrov@shazow.net',
-      url='https://urllib3.readthedocs.io/',
+      url='https://urllib3_gevent.readthedocs.io/',
       license='MIT',
-      packages=['urllib3',
-                'urllib3.packages', 'urllib3.packages.ssl_match_hostname',
-                'urllib3.packages.backports', 'urllib3.contrib',
-                'urllib3.contrib._securetransport', 'urllib3.util',
+      packages=['urllib3_gevent',
+                'urllib3_gevent.packages', 'urllib3_gevent.packages.ssl_match_hostname',
+                'urllib3_gevent.packages.backports', 'urllib3_gevent.contrib',
+                'urllib3_gevent.contrib._securetransport', 'urllib3_gevent.util',
                 ],
       package_dir={'': 'src'},
-      requires=[],
+      requires=['gevent'],
       python_requires=">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4",
       tests_require=[
           # These are a less-specific subset of dev-requirements.txt, for the

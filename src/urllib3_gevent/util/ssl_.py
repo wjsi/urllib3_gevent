@@ -2,10 +2,10 @@ from __future__ import absolute_import
 import errno
 import warnings
 import hmac
-import socket
 
 from binascii import hexlify, unhexlify
 from hashlib import md5, sha1, sha256
+from gevent import socket
 
 from ..exceptions import SSLError, InsecurePlatformWarning, SNIMissingWarning
 from ..packages import six
@@ -42,9 +42,9 @@ _const_compare_digest = getattr(hmac, 'compare_digest',
 
 
 try:  # Test for SSL features
-    import ssl
-    from ssl import wrap_socket, CERT_NONE, PROTOCOL_SSLv23
-    from ssl import HAS_SNI  # Has SNI?
+    from gevent import ssl
+    from gevent.ssl import wrap_socket, CERT_NONE, PROTOCOL_SSLv23
+    from gevent.ssl import HAS_SNI  # Has SNI?
 except ImportError:
     pass
 
@@ -62,7 +62,7 @@ except ImportError:
 if hasattr(socket, 'inet_pton'):
     inet_pton = socket.inet_pton
 else:
-    # Maybe we can use ipaddress if the user has urllib3[secure]?
+    # Maybe we can use ipaddress if the user has urllib3_gevent[secure]?
     try:
         import ipaddress
 
@@ -111,7 +111,7 @@ DEFAULT_CIPHERS = ':'.join([
 ])
 
 try:
-    from ssl import SSLContext  # Modern SSL?
+    from gevent.ssl import SSLContext  # Modern SSL?
 except ImportError:
     import sys
 
@@ -152,10 +152,10 @@ except ImportError:
         def wrap_socket(self, socket, server_hostname=None, server_side=False):
             warnings.warn(
                 'A true SSLContext object is not available. This prevents '
-                'urllib3 from configuring SSL appropriately and may cause '
+                'urllib3_gevent from configuring SSL appropriately and may cause '
                 'certain SSL connections to fail. You can upgrade to a newer '
                 'version of Python to solve this. For more information, see '
-                'https://urllib3.readthedocs.io/en/latest/advanced-usage.html'
+                'https://urllib3_gevent.readthedocs.io/en/latest/advanced-usage.html'
                 '#ssl-warnings',
                 InsecurePlatformWarning
             )
@@ -251,7 +251,7 @@ def create_urllib3_context(ssl_version=None, cert_reqs=None,
 
     If you wish to enable SSLv3, you can do::
 
-        from urllib3.util import ssl_
+        from urllib3_gevent.util import ssl_
         context = ssl_.create_urllib3_context()
         context.options &= ~ssl_.OP_NO_SSLv3
 
@@ -326,7 +326,7 @@ def ssl_wrap_socket(sock, keyfile=None, certfile=None, cert_reqs=None,
     context = ssl_context
     if context is None:
         # Note: This branch of code and all the variables in it are no longer
-        # used by urllib3 itself. We should consider deprecating and removing
+        # used by urllib3_gevent itself. We should consider deprecating and removing
         # this code.
         context = create_urllib3_context(ssl_version, cert_reqs,
                                          ciphers=ciphers)
@@ -364,7 +364,7 @@ def ssl_wrap_socket(sock, keyfile=None, certfile=None, cert_reqs=None,
             'This may cause the server to present an incorrect TLS '
             'certificate, which can cause validation failures. You can upgrade to '
             'a newer version of Python to solve this. For more information, see '
-            'https://urllib3.readthedocs.io/en/latest/advanced-usage.html'
+            'https://urllib3_gevent.readthedocs.io/en/latest/advanced-usage.html'
             '#ssl-warnings',
             SNIMissingWarning
         )

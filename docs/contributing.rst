@@ -1,7 +1,7 @@
 Contributing
 ============
 
-urllib3 is a community-maintained project and we happily accept contributions.
+urllib3_gevent is a community-maintained project and we happily accept contributions.
 
 If you wish to add a new feature or fix a bug:
 
@@ -9,7 +9,7 @@ If you wish to add a new feature or fix a bug:
    a fresh issue to start a discussion around a feature idea or a bug. There is
    a *Contributor Friendly* tag for issues that should be ideal for people who
    are not very familiar with the codebase yet.
-#. Fork the `urllib3 repository on Github <https://github.com/urllib3/urllib3>`_
+#. Fork the `urllib3_gevent repository on Github <https://github.com/urllib3/urllib3>`_
    to start making your changes.
 #. Write a test which shows that the bug was fixed or that the feature works
    as expected.

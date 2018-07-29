@@ -3,14 +3,14 @@ import sys
 import errno
 import functools
 import logging
-import socket
 import platform
 
 import pytest
+from gevent import socket
 
-from urllib3.exceptions import HTTPWarning
-from urllib3.packages import six
-from urllib3.util import ssl_
+from urllib3_gevent.exceptions import HTTPWarning
+from urllib3_gevent.packages import six
+from urllib3_gevent.util import ssl_
 
 # We need a host that will not immediately close the connection with a TCP
 # Reset. SO suggests this hostname

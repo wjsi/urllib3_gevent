@@ -10,72 +10,72 @@ Subpackages
 
 .. toctree::
 
-    urllib3.contrib
-    urllib3.util
+    urllib3_gevent.contrib
+    urllib3_gevent.util
 
 Submodules
 ----------
 
-urllib3.connection module
--------------------------
+urllib3_gevent.connection module
+--------------------------------
 
-.. automodule:: urllib3.connection
+.. automodule:: urllib3_gevent.connection
     :members:
     :undoc-members:
     :show-inheritance:
 
-urllib3.connectionpool module
+urllib3_gevent.connectionpool module
+------------------------------------
+
+.. automodule:: urllib3_gevent.connectionpool
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+urllib3_gevent.exceptions module
+--------------------------------
+
+.. automodule:: urllib3_gevent.exceptions
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+urllib3_gevent.fields module
+----------------------------
+
+.. automodule:: urllib3_gevent.fields
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+urllib3_gevent.filepost module
+------------------------------
+
+.. automodule:: urllib3_gevent.filepost
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+urllib3_gevent.poolmanager module
+---------------------------------
+
+.. automodule:: urllib3_gevent.poolmanager
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+urllib3_gevent.request module
 -----------------------------
 
-.. automodule:: urllib3.connectionpool
+.. automodule:: urllib3_gevent.request
     :members:
     :undoc-members:
     :show-inheritance:
 
-urllib3.exceptions module
--------------------------
+urllib3_gevent.response module
+------------------------------
 
-.. automodule:: urllib3.exceptions
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-urllib3.fields module
----------------------
-
-.. automodule:: urllib3.fields
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-urllib3.filepost module
------------------------
-
-.. automodule:: urllib3.filepost
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-urllib3.poolmanager module
---------------------------
-
-.. automodule:: urllib3.poolmanager
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-urllib3.request module
-----------------------
-
-.. automodule:: urllib3.request
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-urllib3.response module
------------------------
-
-.. automodule:: urllib3.response
+.. automodule:: urllib3_gevent.response
     :members:
     :undoc-members:
     :show-inheritance:
@@ -84,7 +84,7 @@ urllib3.response module
 Module contents
 ---------------
 
-.. automodule:: urllib3
+.. automodule:: urllib3_gevent
     :members:
     :undoc-members:
     :show-inheritance:

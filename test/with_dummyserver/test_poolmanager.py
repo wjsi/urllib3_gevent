@@ -6,10 +6,10 @@ import pytest
 from dummyserver.server import HAS_IPV6
 from dummyserver.testcase import (HTTPDummyServerTestCase,
                                   IPv6HTTPDummyServerTestCase)
-from urllib3.poolmanager import PoolManager
-from urllib3.connectionpool import port_by_scheme
-from urllib3.exceptions import MaxRetryError
-from urllib3.util.retry import Retry
+from urllib3_gevent.poolmanager import PoolManager
+from urllib3_gevent.connectionpool import port_by_scheme
+from urllib3_gevent.exceptions import MaxRetryError
+from urllib3_gevent.util.retry import Retry
 
 
 class TestPoolManager(HTTPDummyServerTestCase):

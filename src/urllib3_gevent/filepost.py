@@ -27,7 +27,7 @@ def iter_field_objects(fields):
     Iterate over fields.
 
     Supports list of (k, v) tuples and dicts, and lists of
-    :class:`~urllib3.fields.RequestField`.
+    :class:`~urllib3_gevent.fields.RequestField`.
 
     """
     if isinstance(fields, dict):
@@ -48,9 +48,9 @@ def iter_fields(fields):
 
     Iterate over fields.
 
-    The addition of :class:`~urllib3.fields.RequestField` makes this function
+    The addition of :class:`~urllib3_gevent.fields.RequestField` makes this function
     obsolete. Instead, use :func:`iter_field_objects`, which returns
-    :class:`~urllib3.fields.RequestField` objects.
+    :class:`~urllib3_gevent.fields.RequestField` objects.
 
     Supports list of (k, v) tuples and dicts.
     """
@@ -65,11 +65,11 @@ def encode_multipart_formdata(fields, boundary=None):
     Encode a dictionary of ``fields`` using the multipart/form-data MIME format.
 
     :param fields:
-        Dictionary of fields or list of (key, :class:`~urllib3.fields.RequestField`).
+        Dictionary of fields or list of (key, :class:`~urllib3_gevent.fields.RequestField`).
 
     :param boundary:
         If not specified, then a random boundary will be generated using
-        :func:`urllib3.filepost.choose_boundary`.
+        :func:`urllib3_gevent.filepost.choose_boundary`.
     """
     body = BytesIO()
     if boundary is None:

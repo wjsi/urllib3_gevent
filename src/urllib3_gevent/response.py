@@ -122,7 +122,7 @@ class HTTPResponse(io.IOBase):
         otherwise unused.
 
     :param retries:
-        The retries contains the last :class:`~urllib3.util.retry.Retry` that
+        The retries contains the last :class:`~urllib3_gevent.util.retry.Retry` that
         was used during the request.
 
     :param enforce_content_length:
@@ -206,7 +206,7 @@ class HTTPResponse(io.IOBase):
 
     @property
     def data(self):
-        # For backwords-compat with earlier urllib3 0.4 and earlier.
+        # For backwords-compat with earlier urllib3_gevent 0.4 and earlier.
         if self._body:
             return self._body
 
@@ -318,7 +318,7 @@ class HTTPResponse(io.IOBase):
     @contextmanager
     def _error_catcher(self):
         """
-        Catch low-level python exceptions, instead re-raising urllib3
+        Catch low-level python exceptions, instead re-raising urllib3_gevent
         variants, so that low-level exceptions are not leaked in the
         high-level api.
 
@@ -471,7 +471,7 @@ class HTTPResponse(io.IOBase):
     def from_httplib(ResponseCls, r, **response_kw):
         """
         Given an :class:`httplib.HTTPResponse` instance ``r``, return a
-        corresponding :class:`urllib3.response.HTTPResponse` object.
+        corresponding :class:`urllib3_gevent.response.HTTPResponse` object.
 
         Remaining parameters are passed to the HTTPResponse constructor, along
         with ``original_response=r``.

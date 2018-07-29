@@ -4,8 +4,8 @@ This module provides a pool manager that uses Google App Engine's
 
 Example usage::
 
-    from urllib3 import PoolManager
-    from urllib3.contrib.appengine import AppEngineManager, is_appengine_sandbox
+    from urllib3_gevent import PoolManager
+    from urllib3_gevent.contrib.appengine import AppEngineManager, is_appengine_sandbox
 
     if is_appengine_sandbox():
         # AppEngineManager uses AppEngine's URLFetch API behind the scenes
@@ -19,12 +19,12 @@ Example usage::
 There are `limitations <https://cloud.google.com/appengine/docs/python/\
 urlfetch/#Python_Quotas_and_limits>`_ to the URLFetch service and it may not be
 the best choice for your application. There are three options for using
-urllib3 on Google App Engine:
+urllib3_gevent on Google App Engine:
 
 1. You can use :class:`AppEngineManager` with URLFetch. URLFetch is
    cost-effective in many circumstances as long as your usage is within the
    limitations.
-2. You can use a normal :class:`~urllib3.PoolManager` by enabling sockets.
+2. You can use a normal :class:`~urllib3_gevent.PoolManager` by enabling sockets.
    Sockets also have `limitations and restrictions
    <https://cloud.google.com/appengine/docs/python/sockets/\
    #limitations-and-restrictions>`_ and have a lower free quota than URLFetch.
@@ -93,7 +93,7 @@ class AppEngineManager(RequestMethods):
         * If a response size is more than 32 megabtyes.
         * If you use an unsupported request method such as OPTIONS.
 
-    Beyond those cases, it will raise normal urllib3 errors.
+    Beyond those cases, it will raise normal urllib3_gevent errors.
     """
 
     def __init__(self, headers=None, retries=None, validate_certificate=True,
@@ -104,14 +104,14 @@ class AppEngineManager(RequestMethods):
 
         if is_prod_appengine_mvms():
             raise AppEnginePlatformError(
-                "Use normal urllib3.PoolManager instead of AppEngineManager"
+                "Use normal urllib3_gevent.PoolManager instead of AppEngineManager"
                 "on Managed VMs, as using URLFetch is not necessary in "
                 "this environment.")
 
         warnings.warn(
-            "urllib3 is using URLFetch on Google App Engine sandbox instead "
+            "urllib3_gevent is using URLFetch on Google App Engine sandbox instead "
             "of sockets. To use sockets directly instead of URLFetch see "
-            "https://urllib3.readthedocs.io/en/latest/reference/urllib3.contrib.html.",
+            "https://urllib3_gevent.readthedocs.io/en/latest/reference/urllib3_gevent.contrib.html.",
             AppEnginePlatformWarning)
 
         RequestMethods.__init__(self, headers)

@@ -1,14 +1,14 @@
 [run]
 include =
-    urllib3/*
+    urllib3_gevent/*
 
 omit =
-    urllib3/packages/*
-    urllib3/contrib/appengine.py
-    urllib3/contrib/ntlmpool.py
-    urllib3/contrib/pyopenssl.py
-    urllib3/contrib/securetransport.py
-    urllib3/contrib/_securetransport/*
+    urllib3_gevent/packages/*
+    urllib3_gevent/contrib/appengine.py
+    urllib3_gevent/contrib/ntlmpool.py
+    urllib3_gevent/contrib/pyopenssl.py
+    urllib3_gevent/contrib/securetransport.py
+    urllib3_gevent/contrib/_securetransport/*
 
 [report]
 exclude_lines =

@@ -1,8 +1,9 @@
 import threading
-import socket
 
-from urllib3.contrib import socks
-from urllib3.exceptions import ConnectTimeoutError, NewConnectionError
+from gevent import socket
+
+from urllib3_gevent.contrib import socks
+from urllib3_gevent.exceptions import ConnectTimeoutError, NewConnectionError
 
 from dummyserver.server import DEFAULT_CERTS
 from dummyserver.testcase import IPV4SocketDummyServerTestCase
@@ -10,8 +11,8 @@ from dummyserver.testcase import IPV4SocketDummyServerTestCase
 import pytest
 
 try:
-    import ssl
-    from urllib3.util import ssl_ as better_ssl
+    from gevent import ssl
+    from urllib3_gevent.util import ssl_ as better_ssl
     HAS_SSL = True
 except ImportError:
     ssl = None

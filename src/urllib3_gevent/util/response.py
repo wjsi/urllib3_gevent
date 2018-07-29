@@ -45,7 +45,7 @@ def assert_header_parsing(headers):
     :param headers: Headers to verify.
     :type headers: `httplib.HTTPMessage`.
 
-    :raises urllib3.exceptions.HeaderParsingError:
+    :raises urllib3_gevent.exceptions.HeaderParsingError:
         If parsing errors are found.
     """
 

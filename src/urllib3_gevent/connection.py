@@ -3,16 +3,17 @@ import datetime
 import logging
 import os
 import sys
-import socket
 from socket import error as SocketError, timeout as SocketTimeout
 import warnings
 from .packages import six
 from .packages.six.moves.http_client import HTTPConnection as _HTTPConnection
 from .packages.six.moves.http_client import HTTPException  # noqa: F401
+from gevent import socket
 
 try:  # Compiled with SSL?
     import ssl
     BaseSSLError = ssl.SSLError
+    from gevent import ssl
 except (ImportError, AttributeError):  # Platform-specific: No SSL.
     ssl = None
 
@@ -76,7 +77,7 @@ class HTTPConnection(_HTTPConnection, object):
     Additional keyword parameters are used to configure attributes of the connection.
     Accepted parameters include:
 
-      - ``strict``: See the documentation on :class:`urllib3.connectionpool.HTTPConnectionPool`
+      - ``strict``: See the documentation on :class:`urllib3_gevent.connectionpool.HTTPConnectionPool`
       - ``source_address``: Set the source address for the current connection.
 
         .. note:: This is ignored for Python 2.6. It is only applied for 2.7 and 3.x
@@ -149,7 +150,7 @@ class HTTPConnection(_HTTPConnection, object):
         """
         Setter for the `host` property.
 
-        We assume that only urllib3 uses the _dns_host attribute; httplib itself
+        We assume that only urllib3_gevent uses the _dns_host attribute; httplib itself
         only uses `host`, and it seems reasonable that other libraries follow suit.
         """
         self._dns_host = value
@@ -367,7 +368,7 @@ class VerifiedHTTPSConnection(HTTPSConnection):
         elif context.verify_mode != ssl.CERT_NONE \
                 and not getattr(context, 'check_hostname', False) \
                 and self.assert_hostname is not False:
-            # While urllib3 attempts to always turn off hostname matching from
+            # While urllib3_gevent attempts to always turn off hostname matching from
             # the TLS library, this cannot always be done. So we check whether
             # the TLS Library still thinks it's matching hostnames.
             cert = self.sock.getpeercert()
@@ -375,7 +376,7 @@ class VerifiedHTTPSConnection(HTTPSConnection):
                 warnings.warn((
                     'Certificate for {0} has no `subjectAltName`, falling back to check for a '
                     '`commonName` for now. This feature is being removed by major browsers and '
-                    'deprecated by RFC 2818. (See https://github.com/shazow/urllib3/issues/497 '
+                    'deprecated by RFC 2818. (See https://github.com/shazow/urllib3_gevent/issues/497 '
                     'for details.)'.format(hostname)),
                     SubjectAltNameWarning
                 )

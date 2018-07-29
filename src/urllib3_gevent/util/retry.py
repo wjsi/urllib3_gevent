@@ -6,6 +6,8 @@ from itertools import takewhile
 import email
 import re
 
+import gevent
+
 from ..exceptions import (
     ConnectTimeoutError,
     MaxRetryError,
@@ -45,7 +47,7 @@ class Retry(object):
 
         response = http.request('GET', 'http://example.com/', retries=False)
 
-    Errors will be wrapped in :class:`~urllib3.exceptions.MaxRetryError` unless
+    Errors will be wrapped in :class:`~urllib3_gevent.exceptions.MaxRetryError` unless
     retries are disabled, in which case the causing exception will be raised.
 
     :param int total:
@@ -113,7 +115,7 @@ class Retry(object):
     :param float backoff_factor:
         A backoff factor to apply between attempts after the second try
         (most errors are resolved immediately by a second try without a
-        delay). urllib3 will sleep for::
+        delay). urllib3_gevent will sleep for::
 
             {backoff factor} * (2 ^ ({number of total retries} - 1))
 
@@ -253,7 +255,7 @@ class Retry(object):
     def sleep_for_retry(self, response=None):
         retry_after = self.get_retry_after(response)
         if retry_after:
-            time.sleep(retry_after)
+            gevent.sleep(retry_after)
             return True
 
         return False
@@ -262,7 +264,7 @@ class Retry(object):
         backoff = self.get_backoff_time()
         if backoff <= 0:
             return
-        time.sleep(backoff)
+        gevent.sleep(backoff)
 
     def sleep(self, response=None):
         """ Sleep between retry attempts.
@@ -332,7 +334,7 @@ class Retry(object):
 
         :param response: A response object, or None, if the server did not
             return a response.
-        :type response: :class:`~urllib3.response.HTTPResponse`
+        :type response: :class:`~urllib3_gevent.response.HTTPResponse`
         :param Exception error: An error encountered during the request, or
             None if the response was received successfully.
 

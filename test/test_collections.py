@@ -1,11 +1,11 @@
-from urllib3._collections import (
+from urllib3_gevent._collections import (
     HTTPHeaderDict,
     RecentlyUsedContainer as Container
 )
 import pytest
 
-from urllib3.exceptions import InvalidHeader
-from urllib3.packages import six
+from urllib3_gevent.exceptions import InvalidHeader
+from urllib3_gevent.packages import six
 xrange = six.moves.xrange
 
 

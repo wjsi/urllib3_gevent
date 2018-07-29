@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 import contextlib
-import socket
-import ssl
 
 import pytest
+from gevent import socket, ssl
 
 try:
-    from urllib3.contrib.securetransport import WrappedSocket
+    from urllib3_gevent.contrib.securetransport import WrappedSocket
 except ImportError:
     pass
 
 
 def setup_module():
     try:
-        from urllib3.contrib.securetransport import inject_into_urllib3
+        from urllib3_gevent.contrib.securetransport import inject_into_urllib3
         inject_into_urllib3()
     except ImportError as e:
         pytest.skip('Could not import SecureTransport: %r' % e)
@@ -21,7 +20,7 @@ def setup_module():
 
 def teardown_module():
     try:
-        from urllib3.contrib.securetransport import extract_from_urllib3
+        from urllib3_gevent.contrib.securetransport import extract_from_urllib3
         extract_from_urllib3()
     except ImportError:
         pass

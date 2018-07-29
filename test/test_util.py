@@ -2,31 +2,30 @@ import hashlib
 import warnings
 import logging
 import io
-import ssl
-import socket
 from itertools import chain
 
 from mock import patch, Mock
 import pytest
+from gevent import socket, ssl
 
-from urllib3 import add_stderr_logger, disable_warnings
-from urllib3.util.request import make_headers, rewind_body, _FAILEDTELL
-from urllib3.util.response import assert_header_parsing
-from urllib3.util.retry import Retry
-from urllib3.util.timeout import Timeout
-from urllib3.util.url import (
+from urllib3_gevent import add_stderr_logger, disable_warnings
+from urllib3_gevent.util.request import make_headers, rewind_body, _FAILEDTELL
+from urllib3_gevent.util.response import assert_header_parsing
+from urllib3_gevent.util.retry import Retry
+from urllib3_gevent.util.timeout import Timeout
+from urllib3_gevent.util.url import (
     get_host,
     parse_url,
     split_first,
     Url,
 )
-from urllib3.util.ssl_ import (
+from urllib3_gevent.util.ssl_ import (
     resolve_cert_reqs,
     resolve_ssl_version,
     ssl_wrap_socket,
     _const_compare_digest_backport,
 )
-from urllib3.exceptions import (
+from urllib3_gevent.exceptions import (
     LocationParseError,
     TimeoutStateError,
     InsecureRequestWarning,
@@ -34,12 +33,12 @@ from urllib3.exceptions import (
     InvalidHeader,
     UnrewindableBodyError,
 )
-from urllib3.util.connection import (
+from urllib3_gevent.util.connection import (
     allowed_gai_family,
     _has_ipv6
 )
-from urllib3.util import is_fp_closed, ssl_
-from urllib3.packages import six
+from urllib3_gevent.util import is_fp_closed, ssl_
+from urllib3_gevent.packages import six
 
 from . import clear_warnings
 
@@ -307,7 +306,7 @@ class TestUtil(object):
 
     def test_add_stderr_logger(self):
         handler = add_stderr_logger(level=logging.INFO)  # Don't actually print debug
-        logger = logging.getLogger('urllib3')
+        logger = logging.getLogger('urllib3_gevent')
         assert handler in logger.handlers
 
         logger.debug('Testing add_stderr_logger')
@@ -343,7 +342,7 @@ class TestUtil(object):
             Timeout(**kwargs)
         assert message in str(e.value)
 
-    @patch('urllib3.util.timeout.current_time')
+    @patch('urllib3_gevent.util.timeout.current_time')
     def test_timeout(self, current_time):
         timeout = Timeout(total=3)
 
@@ -388,7 +387,7 @@ class TestUtil(object):
         timeout = Timeout(connect=1, read=None, total=3)
         assert str(timeout) == "Timeout(connect=1, read=None, total=3)"
 
-    @patch('urllib3.util.timeout.current_time')
+    @patch('urllib3_gevent.util.timeout.current_time')
     def test_timeout_elapsed(self, current_time):
         current_time.return_value = TIMEOUT_EPOCH
         timeout = Timeout(total=3)
@@ -464,7 +463,7 @@ class TestUtil(object):
             '/path/to/certfile', None
         )
 
-    @patch('urllib3.util.ssl_.create_urllib3_context')
+    @patch('urllib3_gevent.util.ssl_.create_urllib3_context')
     def test_ssl_wrap_socket_creates_new_context(self,
                                                  create_urllib3_context):
         socket = object()
@@ -523,29 +522,29 @@ class TestUtil(object):
         assert not _const_compare_digest_backport(target, incorrect)
 
     def test_has_ipv6_disabled_on_compile(self):
-        with patch('socket.has_ipv6', False):
+        with patch('gevent.socket.has_ipv6', False):
             assert not _has_ipv6('::1')
 
     def test_has_ipv6_enabled_but_fails(self):
-        with patch('socket.has_ipv6', True):
-            with patch('socket.socket') as mock:
+        with patch('gevent.socket.has_ipv6', True):
+            with patch('gevent.socket.socket') as mock:
                 instance = mock.return_value
                 instance.bind = Mock(side_effect=Exception('No IPv6 here!'))
                 assert not _has_ipv6('::1')
 
     def test_has_ipv6_enabled_and_working(self):
-        with patch('socket.has_ipv6', True):
-            with patch('socket.socket') as mock:
+        with patch('gevent.socket.has_ipv6', True):
+            with patch('gevent.socket.socket') as mock:
                 instance = mock.return_value
                 instance.bind.return_value = True
                 assert _has_ipv6('::1')
 
     def test_ip_family_ipv6_enabled(self):
-        with patch('urllib3.util.connection.HAS_IPV6', True):
+        with patch('urllib3_gevent.util.connection.HAS_IPV6', True):
             assert allowed_gai_family() == socket.AF_UNSPEC
 
     def test_ip_family_ipv6_disabled(self):
-        with patch('urllib3.util.connection.HAS_IPV6', False):
+        with patch('urllib3_gevent.util.connection.HAS_IPV6', False):
             assert allowed_gai_family() == socket.AF_INET
 
     @pytest.mark.parametrize('value', [

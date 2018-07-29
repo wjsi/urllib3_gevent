@@ -2,18 +2,18 @@ from __future__ import absolute_import
 
 import pytest
 
-from urllib3.connectionpool import (
+from urllib3_gevent.connectionpool import (
     connection_from_url,
     HTTPConnection,
     HTTPConnectionPool,
     HTTPSConnectionPool,
 )
-from urllib3.response import httplib, HTTPResponse
-from urllib3.util.timeout import Timeout
-from urllib3.packages.six.moves.http_client import HTTPException
-from urllib3.packages.six.moves.queue import Empty
-from urllib3.packages.ssl_match_hostname import CertificateError
-from urllib3.exceptions import (
+from urllib3_gevent.response import httplib, HTTPResponse
+from urllib3_gevent.util.timeout import Timeout
+from urllib3_gevent.packages.six.moves.http_client import HTTPException
+from urllib3_gevent.packages.six.moves.queue import Empty
+from urllib3_gevent.packages.ssl_match_hostname import CertificateError
+from urllib3_gevent.exceptions import (
     ClosedPoolError,
     EmptyPoolError,
     HostChangedError,
@@ -23,7 +23,7 @@ from urllib3.exceptions import (
     SSLError,
     TimeoutError,
 )
-from urllib3._collections import HTTPHeaderDict
+from urllib3_gevent._collections import HTTPHeaderDict
 from .test_response import MockChunkedEncodingResponse, MockSock
 
 from socket import error as SocketError
@@ -108,7 +108,7 @@ class TestConnectionPool(object):
         ('google.com', 'http://google.com:80/abracadabra'),
     ])
     def test_same_host_no_port_http(self, a, b):
-        # This test was introduced in #801 to deal with the fact that urllib3
+        # This test was introduced in #801 to deal with the fact that urllib3_gevent
         # never initializes ConnectionPool objects with port=None.
         with HTTPConnectionPool(a) as c:
             assert c.is_same_host(b)
@@ -122,7 +122,7 @@ class TestConnectionPool(object):
         ('google.com', 'https://google.com:443/abracadabra'),
     ])
     def test_same_host_no_port_https(self, a, b):
-        # This test was introduced in #801 to deal with the fact that urllib3
+        # This test was introduced in #801 to deal with the fact that urllib3_gevent
         # never initializes ConnectionPool objects with port=None.
         with HTTPSConnectionPool(a) as c:
             assert c.is_same_host(b)
@@ -387,7 +387,7 @@ class TestConnectionPool(object):
         would be released if the initial request failed, even if a retry
         succeeded.
 
-        [1] <https://github.com/shazow/urllib3/issues/651>
+        [1] <https://github.com/shazow/urllib3_gevent/issues/651>
         """
 
         class _raise_once_make_request_function(object):

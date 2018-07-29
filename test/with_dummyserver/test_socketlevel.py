@@ -1,20 +1,20 @@
 # TODO: Break this module up into pieces. Maybe group by functionality tested
 # rather than the socket level-ness of it.
 
-from urllib3 import HTTPConnectionPool, HTTPSConnectionPool
-from urllib3.poolmanager import proxy_from_url
-from urllib3.exceptions import (
+from urllib3_gevent import HTTPConnectionPool, HTTPSConnectionPool
+from urllib3_gevent.poolmanager import proxy_from_url
+from urllib3_gevent.exceptions import (
         MaxRetryError,
         ProxyError,
         ReadTimeoutError,
         SSLError,
         ProtocolError,
 )
-from urllib3.response import httplib
-from urllib3.util.ssl_ import HAS_SNI
-from urllib3.util.timeout import Timeout
-from urllib3.util.retry import Retry
-from urllib3._collections import HTTPHeaderDict, OrderedDict
+from urllib3_gevent.response import httplib
+from urllib3_gevent.util.ssl_ import HAS_SNI
+from urllib3_gevent.util.timeout import Timeout
+from urllib3_gevent.util.retry import Retry
+from urllib3_gevent._collections import HTTPHeaderDict, OrderedDict
 
 from dummyserver.testcase import SocketDummyServerTestCase, consume_socket
 from dummyserver.server import (
@@ -29,10 +29,9 @@ except ImportError:
         pass
 from threading import Event
 import select
-import socket
-import ssl
 
 import pytest
+from gevent import socket, ssl
 
 
 class TestCookies(SocketDummyServerTestCase):
@@ -693,7 +692,7 @@ class TestSocketClosing(SocketDummyServerTestCase):
         would be released if the initial request failed, even if a retry
         succeeded.
 
-        [1] <https://github.com/shazow/urllib3/issues/651>
+        [1] <https://github.com/shazow/urllib3_gevent/issues/651>
         """
         def socket_handler(listener):
             sock = listener.accept()[0]

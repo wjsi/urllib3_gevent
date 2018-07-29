@@ -1,7 +1,7 @@
 Advanced Usage
 ==============
 
-.. currentmodule:: urllib3
+.. currentmodule:: urllib3_gevent
 
 
 Customizing pool behavior
@@ -13,8 +13,8 @@ default, it will keep a maximum of 10 :class:`~connectionpool.ConnectionPool`
 instances. If you're making requests to many different hosts it might improve
 performance to increase this number::
 
-    >>> import urllib3
-    >>> http = urllib3.PoolManager(num_pools=50)
+    >>> import urllib3_gevent
+    >>> http = urllib3_gevent.PoolManager(num_pools=50)
 
 However, keep in mind that this does increase memory and socket consumption.
 
@@ -25,10 +25,10 @@ is complete. By default only one connection will be saved for re-use. If you
 are making many requests to the same host simultaneously it might improve
 performance to increase this number::
 
-    >>> import urllib3
-    >>> http = urllib3.PoolManager(maxsize=10)
+    >>> import urllib3_gevent
+    >>> http = urllib3_gevent.PoolManager(maxsize=10)
     # Alternatively
-    >>> http = urllib3.HTTPConnectionPool('google.com', maxsize=10)
+    >>> http = urllib3_gevent.HTTPConnectionPool('google.com', maxsize=10)
 
 The behavior of the pooling for :class:`~connectionpool.ConnectionPool` is
 different from :class:`~poolmanager.PoolManager`. By default, if a new
@@ -39,9 +39,9 @@ determine the maximum number of connections that can be open to a particular
 host, just the maximum number of connections to keep in the pool. However, if you specify ``block=True`` then there can be at most ``maxsize`` connections
 open to a particular host::
 
-    >>> http = urllib3.PoolManager(maxsize=10, block=True)
+    >>> http = urllib3_gevent.PoolManager(maxsize=10, block=True)
     # Alternatively
-    >>> http = urllib3.HTTPConnectionPool('google.com', maxsize=10, block=True)
+    >>> http = urllib3_gevent.HTTPConnectionPool('google.com', maxsize=10, block=True)
 
 Any new requests will block until a connection is available from the pool.
 This is a great way to prevent flooding a host with too many connections in
@@ -55,8 +55,8 @@ Streaming and IO
 When dealing with large responses it's often better to stream the response
 content::
 
-    >>> import urllib3
-    >>> http = urllib3.PoolManager()
+    >>> import urllib3_gevent
+    >>> http = urllib3_gevent.PoolManager()
     >>> r = http.request(
     ...     'GET',
     ...     'http://httpbin.org/bytes/1024',
@@ -115,8 +115,8 @@ Proxies
 You can use :class:`~poolmanager.ProxyManager` to tunnel requests through an
 HTTP proxy::
 
-    >>> import urllib3
-    >>> proxy = urllib3.ProxyManager('http://localhost:3128/')
+    >>> import urllib3_gevent
+    >>> proxy = urllib3_gevent.ProxyManager('http://localhost:3128/')
     >>> proxy.request('GET', 'http://google.com/')
 
 The usage of :class:`~poolmanager.ProxyManager` is the same as
@@ -127,12 +127,12 @@ SOCKS5 proxies. In order to use SOCKS proxies you will need to install
 `PySocks <https://pypi.org/project/PySocks/>`_ or install urllib3 with the
 ``socks`` extra::
 
-    pip install urllib3[socks]
+    pip install urllib3_gevent[socks]
 
 Once PySocks is installed, you can use
 :class:`~contrib.socks.SOCKSProxyManager`::
 
-    >>> from urllib3.contrib.socks import SOCKSProxyManager
+    >>> from urllib3_gevent.contrib.socks import SOCKSProxyManager
     >>> proxy = SOCKSProxyManager('socks5://localhost:8889/')
     >>> proxy.request('GET', 'http://google.com/')
 
@@ -148,8 +148,8 @@ generated your own certificates or when you're using a private certificate
 authority. Just provide the full path to the certificate bundle when creating a
 :class:`~poolmanager.PoolManager`::
 
-    >>> import urllib3
-    >>> http = urllib3.PoolManager(
+    >>> import urllib3_gevent
+    >>> http = urllib3_gevent.PoolManager(
     ...     cert_reqs='CERT_REQUIRED',
     ...     ca_certs='/path/to/your/certificate_bundle')
 
@@ -163,7 +163,7 @@ and the client need to verify each other's identity. Typically these
 certificates are issued from the same authority. To use a client certificate,
 provide the full path when creating a :class:`~poolmanager.PoolManager`::
 
-    >>> http = urllib3.PoolManager(
+    >>> http = urllib3_gevent.PoolManager(
     ...     cert_file='/path/to/your/client_cert.pem',
     ...     cert_reqs='CERT_REQUIRED',
     ...     ca_certs='/path/to/your/certificate_bundle')
@@ -189,7 +189,7 @@ has more in-depth analysis and explanation.
 SSL Warnings
 ------------
 
-urllib3 will issue several different warnings based on the level of certificate
+urllib3_gevent will issue several different warnings based on the level of certificate
 verification support. These warning indicate particular situations and can
 be resolved in different ways.
 
@@ -216,10 +216,10 @@ be resolved in different ways.
 .. _disable_ssl_warnings:
 
 Making unverified HTTPS requests is **strongly** discouraged, however, if you
-understand the risks and wish to disable these warnings, you can use :func:`~urllib3.disable_warnings`::
+understand the risks and wish to disable these warnings, you can use :func:`~urllib3_gevent.disable_warnings`::
 
-    >>> import urllib3
-    >>> urllib3.disable_warnings()
+    >>> import urllib3_gevent
+    >>> urllib3_gevent.disable_warnings()
 
 Alternatively you can capture the warnings with the standard :mod:`logging` module::
 
@@ -232,28 +232,28 @@ Finally, you can suppress the warnings at the interpreter level by setting the
 Google App Engine
 -----------------
 
-urllib3 supports `Google App Engine <https://cloud.google.com/appengine>`_ with
+urllib3_gevent supports `Google App Engine <https://cloud.google.com/appengine>`_ with
 some caveats.
 
 If you're using the `Flexible environment
 <https://cloud.google.com/appengine/docs/flexible/>`_, you do not have to do
-any configuration- urllib3 will just work. However, if you're using the
+any configuration- urllib3_gevent will just work. However, if you're using the
 `Standard environment <https://cloud.google.com/appengine/docs/python/>`_ then
-you either have to use :mod:`urllib3.contrib.appengine`'s
-:class:`~urllib3.contrib.appengine.AppEngineManager` or use the `Sockets API
+you either have to use :mod:`urllib3_gevent.contrib.appengine`'s
+:class:`~urllib3_gevent.contrib.appengine.AppEngineManager` or use the `Sockets API
 <https://cloud.google.com/appengine/docs/python/sockets/>`_
 
-To use :class:`~urllib3.contrib.appengine.AppEngineManager`::
+To use :class:`~urllib3_gevent.contrib.appengine.AppEngineManager`::
 
-    >>> from urllib3.contrib.appengine import AppEngineManager
+    >>> from urllib3_gevent.contrib.appengine import AppEngineManager
     >>> http = AppEngineManager()
     >>> http.request('GET', 'https://google.com/')
 
 To use the Sockets API, add the following to your app.yaml and use
-:class:`~urllib3.poolmanager.PoolManager` as usual::
+:class:`~urllib3_gevent.poolmanager.PoolManager` as usual::
 
     env_variables:
         GAE_USE_SOCKETS_HTTPLIB : 'true'
 
 For more details on the limitations and gotchas, see
-:mod:`urllib3.contrib.appengine`.
+:mod:`urllib3_gevent.contrib.appengine`.

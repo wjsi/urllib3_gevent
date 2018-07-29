@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from urllib3 import HTTPConnectionPool
-from urllib3.packages import six
+from urllib3_gevent import HTTPConnectionPool
+from urllib3_gevent.packages import six
 from dummyserver.testcase import SocketDummyServerTestCase
 
 

@@ -15,8 +15,8 @@ from tornado import httputil
 from datetime import datetime
 from datetime import timedelta
 
-from urllib3.packages.six.moves.http_client import responses
-from urllib3.packages.six.moves.urllib.parse import urlsplit
+from urllib3_gevent.packages.six.moves.http_client import responses
+from urllib3_gevent.packages.six.moves.urllib.parse import urlsplit
 
 log = logging.getLogger(__name__)
 
@@ -320,7 +320,7 @@ def _parse_header(line):
     """
     import tornado.httputil
     import email.utils
-    from urllib3.packages import six
+    from urllib3_gevent.packages import six
     if not six.PY3:
         line = line.encode('utf-8')
     parts = tornado.httputil._parseparam(';' + line)

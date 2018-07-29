@@ -7,7 +7,7 @@ from ..exceptions import LocationParseError
 url_attrs = ['scheme', 'auth', 'host', 'port', 'path', 'query', 'fragment']
 
 # We only want to normalize urls with an HTTP(S) scheme.
-# urllib3 infers URLs without a scheme (None) to be http.
+# urllib3_gevent infers URLs without a scheme (None) to be http.
 NORMALIZABLE_SCHEMES = ('http', 'https', None)
 
 

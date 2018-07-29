@@ -3,7 +3,7 @@ import mock
 
 import pytest
 
-from urllib3.connection import (
+from urllib3_gevent.connection import (
     CertificateError,
     _match_hostname,
     RECENT_DATE
@@ -35,7 +35,7 @@ class TestConnection(object):
         cert = {'subjectAltName': [('DNS', 'foo')]}
         asserted_hostname = 'bar'
         try:
-            with mock.patch('urllib3.connection.log.error') as mock_log:
+            with mock.patch('urllib3_gevent.connection.log.error') as mock_log:
                 _match_hostname(cert, asserted_hostname)
         except CertificateError as e:
             assert "hostname 'bar' doesn't match 'foo'" in str(e)
@@ -49,7 +49,7 @@ class TestConnection(object):
     def test_recent_date(self):
         # This test is to make sure that the RECENT_DATE value
         # doesn't get too far behind what the current date is.
-        # When this test fails update urllib3.connection.RECENT_DATE
+        # When this test fails update urllib3_gevent.connection.RECENT_DATE
         # according to the rules defined in that file.
         two_years = datetime.timedelta(days=365 * 2)
         assert RECENT_DATE > (datetime.datetime.today() - two_years).date()

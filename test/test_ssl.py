@@ -1,8 +1,8 @@
 import mock
 import pytest
 from six import b
-from urllib3.util import ssl_
-from urllib3.exceptions import SNIMissingWarning
+from urllib3_gevent.util import ssl_
+from urllib3_gevent.exceptions import SNIMissingWarning
 
 
 @pytest.mark.parametrize('addr', [

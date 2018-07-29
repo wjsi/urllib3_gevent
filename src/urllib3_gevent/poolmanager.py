@@ -38,7 +38,7 @@ _key_fields = (
     'key_ca_certs',  # str
     'key_ssl_version',  # str
     'key_ca_cert_dir',  # str
-    'key_ssl_context',  # instance of ssl.SSLContext or urllib3.util.ssl_.SSLContext
+    'key_ssl_context',  # instance of ssl.SSLContext or urllib3_gevent.util.ssl_.SSLContext
     'key_maxsize',  # int
     'key_headers',  # dict
     'key__proxy',  # parsed proxy url
@@ -133,7 +133,7 @@ class PoolManager(RequestMethods):
 
     :param \\**connection_pool_kw:
         Additional parameters are used to create fresh
-        :class:`urllib3.connectionpool.ConnectionPool` instances.
+        :class:`urllib3_gevent.connectionpool.ConnectionPool` instances.
 
     Example::
 
@@ -208,7 +208,7 @@ class PoolManager(RequestMethods):
         Get a :class:`ConnectionPool` based on the host, port, and scheme.
 
         If ``port`` isn't given, it will be derived from the ``scheme`` using
-        ``urllib3.connectionpool.port_by_scheme``. If ``pool_kwargs`` is
+        ``urllib3_gevent.connectionpool.port_by_scheme``. If ``pool_kwargs`` is
         provided, it is merged with the instance's ``connection_pool_kw``
         variable and used to create the new connection pool, if one is
         needed.
@@ -265,11 +265,11 @@ class PoolManager(RequestMethods):
 
     def connection_from_url(self, url, pool_kwargs=None):
         """
-        Similar to :func:`urllib3.connectionpool.connection_from_url`.
+        Similar to :func:`urllib3_gevent.connectionpool.connection_from_url`.
 
         If ``pool_kwargs`` is not provided and a new pool needs to be
         constructed, ``self.connection_pool_kw`` is used to initialize
-        the :class:`urllib3.connectionpool.ConnectionPool`. If ``pool_kwargs``
+        the :class:`urllib3_gevent.connectionpool.ConnectionPool`. If ``pool_kwargs``
         is provided, it is used instead. Note that if a new pool does not
         need to be created for the request, the provided ``pool_kwargs`` are
         not used.
@@ -300,12 +300,12 @@ class PoolManager(RequestMethods):
 
     def urlopen(self, method, url, redirect=True, **kw):
         """
-        Same as :meth:`urllib3.connectionpool.HTTPConnectionPool.urlopen`
+        Same as :meth:`urllib3_gevent.connectionpool.HTTPConnectionPool.urlopen`
         with custom cross-host redirect logic and only sends the request-uri
         portion of the ``url``.
 
         The given ``url`` parameter must be absolute, such that an appropriate
-        :class:`urllib3.connectionpool.ConnectionPool` can be chosen for it.
+        :class:`urllib3_gevent.connectionpool.ConnectionPool` can be chosen for it.
         """
         u = parse_url(url)
         conn = self.connection_from_host(u.host, port=u.port, scheme=u.scheme)
@@ -373,7 +373,7 @@ class ProxyManager(PoolManager):
         authentication.
 
     Example:
-        >>> proxy = urllib3.ProxyManager('http://localhost:3128/')
+        >>> proxy = urllib3_gevent.ProxyManager('http://localhost:3128/')
         >>> r1 = proxy.request('GET', 'http://google.com/')
         >>> r2 = proxy.request('GET', 'http://httpbin.org/')
         >>> len(proxy.pools)

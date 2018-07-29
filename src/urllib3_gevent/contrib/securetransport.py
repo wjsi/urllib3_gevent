@@ -1,7 +1,7 @@
 """
-SecureTranport support for urllib3 via ctypes.
+SecureTranport support for urllib3_gevent via ctypes.
 
-This makes platform-native TLS available to urllib3 users on macOS without the
+This makes platform-native TLS available to urllib3_gevent users on macOS without the
 use of a compiler. This is an important feature because the Python Package
 Index is moving to become a TLSv1.2-or-higher server, and the default OpenSSL
 that ships with macOS is not capable of doing TLSv1.2. The only way to resolve
@@ -19,8 +19,8 @@ contrib module. So...here we are.
 
 To use this module, simply import and inject it::
 
-    import urllib3.contrib.securetransport
-    urllib3.contrib.securetransport.inject_into_urllib3()
+    import urllib3_gevent.contrib.securetransport
+    urllib3_gevent.contrib.securetransport.inject_into_urllib3()
 
 Happy TLSing!
 """
@@ -31,10 +31,10 @@ import ctypes
 import errno
 import os.path
 import shutil
-import socket
-import ssl
 import threading
 import weakref
+
+from gevent import socket, ssl
 
 from .. import util
 from ._securetransport.bindings import (
@@ -153,7 +153,7 @@ if hasattr(ssl, "PROTOCOL_TLS"):
 
 def inject_into_urllib3():
     """
-    Monkey-patch urllib3 with SecureTransport-backed SSL-support.
+    Monkey-patch urllib3_gevent with SecureTransport-backed SSL-support.
     """
     util.ssl_.SSLContext = SecureTransportContext
     util.HAS_SNI = HAS_SNI
@@ -623,7 +623,7 @@ class WrappedSocket(object):
         # This is gross. Really gross. It's going to be a few hundred LoC extra
         # just to repeat something that SecureTransport can *already do*. So my
         # operating assumption at this time is that what we want to do is
-        # instead to just flag to urllib3 that it shouldn't do its own hostname
+        # instead to just flag to urllib3_gevent that it shouldn't do its own hostname
         # validation when using SecureTransport.
         if not binary_form:
             raise ValueError(
@@ -751,7 +751,7 @@ class SecureTransportContext(object):
         #
         # This means that, if we had previously had load_verify_locations
         # called, this does not undo that. We need to do that because it turns
-        # out that the rest of the urllib3 code will attempt to load the
+        # out that the rest of the urllib3_gevent code will attempt to load the
         # default verify paths if it hasn't been told about any paths, even if
         # the context itself was sometime earlier. We resolve that by just
         # ignoring it.

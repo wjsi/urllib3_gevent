@@ -12,13 +12,12 @@ import random
 import string
 import sys
 import threading
-import socket
 import warnings
-import ssl
 from datetime import datetime
 
-from urllib3.exceptions import HTTPWarning
+from urllib3_gevent.exceptions import HTTPWarning
 
+from gevent import socket, ssl
 from tornado.platform.auto import set_close_exec
 import tornado.httpserver
 import tornado.ioloop

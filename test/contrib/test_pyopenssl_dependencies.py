@@ -5,7 +5,7 @@ import pytest
 from mock import patch, Mock
 
 try:
-    from urllib3.contrib.pyopenssl import (
+    from urllib3_gevent.contrib.pyopenssl import (
         inject_into_urllib3,
         extract_from_urllib3
     )
@@ -15,14 +15,14 @@ except ImportError:
 
 def setup_module():
     try:
-        from urllib3.contrib.pyopenssl import inject_into_urllib3  # noqa: F401
+        from urllib3_gevent.contrib.pyopenssl import inject_into_urllib3  # noqa: F401
     except ImportError as e:
         pytest.skip('Could not import PyOpenSSL: %r' % e)
 
 
 class TestPyOpenSSLInjection(unittest.TestCase):
     """
-    Tests for error handling in pyopenssl's 'inject_into urllib3'
+    Tests for error handling in pyopenssl's 'inject_into urllib3_gevent'
     """
     def test_inject_validate_fail_cryptography(self):
         """

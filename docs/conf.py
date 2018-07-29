@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# urllib3 documentation build configuration file, created by
+# urllib3_gevent documentation build configuration file, created by
 # sphinx-quickstart on Wed Oct  5 13:15:40 2011.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -43,7 +43,7 @@ MOCK_MODULES = (
 sys.modules.update((mod_name, MockModule()) for mod_name in MOCK_MODULES)
 
 
-import urllib3
+import urllib3_gevent
 
 
 # -- General configuration -----------------------------------------------------
@@ -76,7 +76,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'urllib3'
+project = u'urllib3_gevent'
 copyright = u'{year}, Andrey Petrov'.format(year=date.today().year)
 
 # The version info for the project you're documenting, acts as replacement for
@@ -84,7 +84,7 @@ copyright = u'{year}, Andrey Petrov'.format(year=date.today().year)
 # built documents.
 #
 # The short X.Y version.
-version = urllib3.__version__
+version = urllib3_gevent.__version__
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -135,7 +135,7 @@ html_theme = 'alabaster'
 html_theme_options = {
     'description': 'Sanity-friendly HTTP client.',
     'github_user': 'shazow',
-    'github_repo': 'urllib3',
+    'github_repo': 'urllib3_gevent',
     'github_button': False,
     'github_banner': True,
     'travis_button': True,
@@ -233,7 +233,7 @@ htmlhelp_basename = 'urllib3doc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'urllib3.tex', u'urllib3 Documentation',
+  ('index', 'urllib3_gevent.tex', u'urllib3_gevent Documentation',
    u'Andrey Petrov', 'manual'),
 ]
 
@@ -266,7 +266,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'urllib3', u'urllib3 Documentation',
+    ('index', 'urllib3_gevent', u'urllib3_gevent Documentation',
      [u'Andrey Petrov'], 1)
 ]
 

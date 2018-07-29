@@ -1,16 +1,16 @@
 import signal
-import socket
 import threading
 try:
     from time import monotonic
 except ImportError:
     from time import time as monotonic
-import time
 
 import pytest
+import gevent
+from gevent import socket
 
 from .socketpair_helper import socketpair
-from urllib3.util.wait import (
+from urllib3_gevent.util.wait import (
     wait_for_read,
     wait_for_write,
     wait_for_socket,
@@ -185,7 +185,7 @@ def test_eintr_infinite_timeout(wfs, spair):
         interrupt_count[0] += 1
 
     def make_a_readable_after_one_second():
-        time.sleep(1)
+        gevent.sleep(1)
         b.send(b"x")
 
     old_handler = signal.signal(signal.SIGALRM, handler)
